@@ -145,6 +145,85 @@
 }
 
 /* 浏览器 */
+.browser-tabs-bar {
+    display: flex;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 4px 4px 0 4px;
+    gap: 4px;
+}
+
+.browser-tabs {
+    display: flex;
+    gap: 2px;
+    flex: 1;
+    overflow-x: auto;
+}
+
+.browser-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    min-width: 120px;
+    max-width: 200px;
+    transition: background 0.15s ease;
+}
+
+.browser-tab:hover {
+    background: var(--bg-hover);
+}
+
+.browser-tab.active {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--accent-blue);
+}
+
+.tab-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.tab-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+}
+
+.tab-close:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.browser-new-tab {
+    padding: 6px 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.browser-new-tab:hover {
+    background: var(--bg-hover);
+}
+
 .browser-toolbar {
     padding: 8px;
     background: var(--bg-secondary);
@@ -161,10 +240,11 @@
 
 .browser-url-bar {
     flex: 1;
-    padding: 4px 8px;
+    padding: 6px 12px;
     background: var(--bg-primary);
     border: 1px solid var(--border-color);
-    font-size: 12px;
+    border-radius: 4px;
+    font-size: 13px;
 }
 
 .browser-content {
@@ -173,12 +253,109 @@
     color: black;
     overflow: hidden;
     display: flex;
+    position: relative;
 }
 
 .browser-iframe {
     width: 100%;
     height: 100%;
     border: none;
+}
+
+.browser-downloads {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.browser-downloads.hidden {
+    display: none;
+}
+
+.downloads-header {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.downloads-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.downloads-close:hover {
+    color: var(--text-primary);
+}
+
+.downloads-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.downloads-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.download-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.download-icon {
+    font-size: 24px;
+}
+
+.download-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.download-name {
+    font-weight: 600;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.download-url {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.download-date {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.download-open {
+    padding: 4px 8px;
+    font-size: 11px;
 }
 
 /* 文本编辑器 */
@@ -359,5 +536,288 @@
 }
 
 .about-info-value {
+    color: var(--text-secondary);
+}
+
+/* 图片查看器 */
+.image-viewer-toolbar {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.image-viewer-content {
+    flex: 1;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    position: relative;
+}
+
+.image-viewer-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+    cursor: move;
+}
+
+.image-viewer-placeholder {
+    font-size: 48px;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.5;
+}
+
+.iv-zoom-level {
+    margin-left: auto;
+    padding: 4px 8px;
+    background: var(--bg-primary);
+    border-radius: 2px;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+/* 任务管理器 */
+.task-manager-tabs {
+    display: flex;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tm-tab {
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tm-tab:hover {
+    background: var(--bg-hover);
+}
+
+.tm-tab.active {
+    border-bottom-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.task-manager-content {
+    flex: 1;
+    overflow: auto;
+}
+
+.tm-tab-content {
+    padding: 12px;
+}
+
+.tm-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tm-process-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tm-process-table th {
+    background: var(--bg-secondary);
+    padding: 8px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tm-process-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tm-process-table tbody tr {
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.tm-process-table tbody tr:hover {
+    background: var(--bg-hover);
+}
+
+.tm-process-table tbody tr.selected {
+    background: var(--accent-blue);
+}
+
+.tm-status {
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.tm-status.running {
+    background: #27ae60;
+    color: white;
+}
+
+.tm-status.sleeping {
+    background: #f39c12;
+    color: white;
+}
+
+.tm-status.minimized {
+    background: #95a5a6;
+    color: white;
+}
+
+.tm-performance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.tm-perf-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    border-radius: 4px;
+}
+
+.tm-perf-title {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.tm-perf-value {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.tm-perf-bar {
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tm-perf-bar-fill {
+    height: 100%;
+    background: var(--accent-blue);
+    transition: width 0.3s ease;
+}
+
+/* 记事本 */
+.notepad-container {
+    display: flex;
+    height: 100%;
+}
+
+.notepad-sidebar {
+    width: 250px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.notepad-sidebar-header {
+    padding: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notepad-notes-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.np-note-item {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.np-note-item:hover {
+    background: var(--bg-hover);
+}
+
+.np-note-item.active {
+    background: var(--accent-blue);
+}
+
+.np-note-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.np-note-preview {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.np-note-date {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.np-empty {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.notepad-editor {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+}
+
+.notepad-title {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 8px;
+    margin-bottom: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.notepad-textarea {
+    flex: 1;
+    padding: 12px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+}
+
+.notepad-footer {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.np-char-count {
+    margin-left: auto;
+    font-size: 12px;
     color: var(--text-secondary);
 }

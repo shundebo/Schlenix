@@ -2,9 +2,7 @@
 
 class TerminalApp {
     constructor() {
-        this.history = [];
-        this.historyIndex = -1;
-        this.currentPath = '/home/user';
+        this.instances = new Map(); // 存储每个窗口的状态
     }
 
     open() {
@@ -14,6 +12,13 @@ class TerminalApp {
             width: 700,
             height: 450,
             content: this.getContent()
+        });
+
+        // 为每个窗口创建独立的状态
+        this.instances.set(windowId, {
+            history: [],
+            historyIndex: -1,
+            currentPath: '/home/user'
         });
 
         this.attachEvents(windowId);
@@ -44,33 +49,35 @@ class TerminalApp {
         const output = content.querySelector('.terminal-output');
 
         input.addEventListener('keydown', (e) => {
+            const instance = this.instances.get(windowId);
+            if (!instance) return;
+
             if (e.key === 'Enter') {
                 const command = input.value.trim();
                 if (command) {
-                    this.executeCommand(command, output);
-                    this.history.push(command);
-                    this.historyIndex = this.history.length;
+                    this.executeCommand(windowId, command, output);
+                    instance.history.push(command);
+                    instance.historyIndex = instance.history.length;
                 }
                 input.value = '';
             } else if (e.key === 'ArrowUp') {
                 e.preventDefault();
-                if (this.historyIndex > 0) {
-                    this.historyIndex--;
-                    input.value = this.history[this.historyIndex];
+                if (instance.historyIndex > 0) {
+                    instance.historyIndex--;
+                    input.value = instance.history[instance.historyIndex];
                 }
             } else if (e.key === 'ArrowDown') {
                 e.preventDefault();
-                if (this.historyIndex < this.history.length - 1) {
-                    this.historyIndex++;
-                    input.value = this.history[this.historyIndex];
+                if (instance.historyIndex < instance.history.length - 1) {
+                    instance.historyIndex++;
+                    input.value = instance.history[instance.historyIndex];
                 } else {
-                    this.historyIndex = this.history.length;
+                    instance.historyIndex = instance.history.length;
                     input.value = '';
                 }
             } else if (e.key === 'Tab') {
                 e.preventDefault();
-                // 简单的命令自动补全
-                const commands = ['help', 'clear', 'echo', 'date', 'whoami', 'pwd', 'ls', 'cat', 'neofetch', 'about', 'uname', 'uptime', 'free', 'df', 'ps', 'history'];
+                const commands = ['help', 'clear', 'echo', 'date', 'whoami', 'pwd', 'cd', 'ls', 'cat', 'mkdir', 'touch', 'rm', 'neofetch', 'about', 'uname', 'uptime', 'free', 'df', 'ps', 'history'];
                 const partial = input.value.toLowerCase();
                 const matches = commands.filter(cmd => cmd.startsWith(partial));
                 if (matches.length === 1) {
@@ -80,9 +87,25 @@ class TerminalApp {
                 }
             }
         });
+
+        // 窗口关闭时清理实例
+        const window = windowManager.windows.get(windowId);
+        if (window && window.element) {
+            const closeBtn = window.element.querySelector('.window-control-btn.close');
+            if (closeBtn) {
+                const originalClose = closeBtn.onclick;
+                closeBtn.onclick = () => {
+                    this.instances.delete(windowId);
+                    if (originalClose) originalClose();
+                };
+            }
+        }
     }
 
-    executeCommand(command, output) {
+    executeCommand(windowId, command, output) {
+        const instance = this.instances.get(windowId);
+        if (!instance) return;
+
         // 显示命令
         this.addLine(output, `<span class="terminal-prompt">user@schlenix:~$</span> ${command}`);
 
@@ -132,11 +155,11 @@ class TerminalApp {
                 break;
 
             case 'pwd':
-                this.addLine(output, this.currentPath);
+                this.addLine(output, instance.currentPath);
                 break;
 
             case 'ls':
-                const lsPath = args[0] || this.currentPath;
+                const lsPath = args[0] || instance.currentPath;
                 const lsResult = storage.ls(lsPath);
                 if (lsResult.success) {
                     const items = Object.entries(lsResult.items).map(([name, item]) => {
@@ -157,7 +180,7 @@ class TerminalApp {
                 if (args.length === 0) {
                     this.addLine(output, 'cat: 缺少文件名');
                 } else {
-                    const catPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const catPath = args[0].startsWith('/') ? args[0] : instance.currentPath + '/' + args[0];
                     const catResult = storage.readFile(catPath);
                     if (catResult.success) {
                         catResult.content.split('\n').forEach(line => this.addLine(output, line));
@@ -171,7 +194,7 @@ class TerminalApp {
                 if (args.length === 0) {
                     this.addLine(output, 'mkdir: 缺少目录名');
                 } else {
-                    const mkdirPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const mkdirPath = args[0].startsWith('/') ? args[0] : instance.currentPath + '/' + args[0];
                     const mkdirResult = storage.mkdir(mkdirPath);
                     if (mkdirResult.success) {
                         this.addLine(output, `已创建目录: ${args[0]}`);
@@ -185,7 +208,7 @@ class TerminalApp {
                 if (args.length === 0) {
                     this.addLine(output, 'touch: 缺少文件名');
                 } else {
-                    const touchPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const touchPath = args[0].startsWith('/') ? args[0] : instance.currentPath + '/' + args[0];
                     const touchResult = storage.touch(touchPath);
                     if (touchResult.success) {
                         this.addLine(output, `已创建文件: ${args[0]}`);
@@ -205,7 +228,7 @@ class TerminalApp {
                         this.addLine(output, 'rm: 缺少文件名');
                         break;
                     }
-                    const rmPath = filename.startsWith('/') ? filename : this.currentPath + '/' + filename;
+                    const rmPath = filename.startsWith('/') ? filename : instance.currentPath + '/' + filename;
                     const rmResult = storage.rm(rmPath, recursive);
                     if (rmResult.success) {
                         this.addLine(output, `已删除: ${filename}`);
@@ -217,12 +240,12 @@ class TerminalApp {
 
             case 'cd':
                 if (args.length === 0) {
-                    this.currentPath = '/home/user';
+                    instance.currentPath = '/home/user';
                 } else {
-                    const newPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const newPath = args[0].startsWith('/') ? args[0] : instance.currentPath + '/' + args[0];
                     const node = storage.getNode(newPath);
                     if (node && node.type === 'directory') {
-                        this.currentPath = newPath;
+                        instance.currentPath = newPath;
                     } else {
                         this.addLine(output, `cd: ${args[0]}: 目录不存在`);
                     }
@@ -265,7 +288,7 @@ class TerminalApp {
                 break;
 
             case 'history':
-                this.history.forEach((cmd, index) => {
+                instance.history.forEach((cmd, index) => {
                     this.addLine(output, `  ${index + 1}  ${cmd}`);
                 });
                 break;

@@ -129,6 +129,30 @@ document.addEventListener('keydown', (e) => {
             window.apps['browser'].open();
         }
     }
+
+    // Ctrl/Cmd + Alt + N: 打开记事本
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'n') {
+        e.preventDefault();
+        if (window.apps['notepad']) {
+            window.apps['notepad'].open();
+        }
+    }
+
+    // Ctrl/Cmd + Alt + M: 打开任务管理器
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'm') {
+        e.preventDefault();
+        if (window.apps['task-manager']) {
+            window.apps['task-manager'].open();
+        }
+    }
+
+    // Ctrl/Cmd + Alt + I: 打开图片查看器
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'i') {
+        e.preventDefault();
+        if (window.apps['image-viewer']) {
+            window.apps['image-viewer'].open();
+        }
+    }
 });
 
 console.log('Schlenix 操作系统已就绪！');
@@ -136,3 +160,6 @@ console.log('快捷键:');
 console.log('  Ctrl+Alt+T - 打开终端');
 console.log('  Ctrl+Alt+F - 打开文件管理器');
 console.log('  Ctrl+Alt+B - 打开浏览器');
+console.log('  Ctrl+Alt+N - 打开记事本');
+console.log('  Ctrl+Alt+M - 打开任务管理器');
+console.log('  Ctrl+Alt+I - 打开图片查看器');

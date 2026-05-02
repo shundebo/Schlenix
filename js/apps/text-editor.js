@@ -66,16 +66,20 @@ class TextEditorApp {
         const btnSave = content.querySelector('.te-btn-save');
         const btnSaveAs = content.querySelector('.te-btn-save-as');
 
-        const instance = this.instances.get(windowId);
-
         // 监听文本变化
         textarea.addEventListener('input', () => {
-            instance.modified = true;
-            this.updateTitle(windowId);
+            const instance = this.instances.get(windowId);
+            if (instance) {
+                instance.modified = true;
+                this.updateTitle(windowId);
+            }
         });
 
         // 新建
         btnNew.addEventListener('click', () => {
+            const instance = this.instances.get(windowId);
+            if (!instance) return;
+            
             if (instance.modified) {
                 if (!confirm('当前文档未保存，确定要新建吗？')) {
                     return;
@@ -90,6 +94,9 @@ class TextEditorApp {
 
         // 打开
         btnOpen.addEventListener('click', () => {
+            const instance = this.instances.get(windowId);
+            if (!instance) return;
+            
             const path = prompt('请输入文件路径：', '/home/user/Documents/welcome.txt');
             if (!path) return;
 
