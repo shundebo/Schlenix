@@ -1,0 +1,325 @@
+/* 应用程序样式 */
+
+/* 文件管理器 */
+.file-manager-toolbar {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.file-manager-path {
+    flex: 1;
+    padding: 4px 8px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.file-manager-content {
+    display: flex;
+    height: 100%;
+}
+
+.file-manager-sidebar {
+    width: 180px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    padding: 8px;
+}
+
+.sidebar-item {
+    padding: 6px 8px;
+    cursor: pointer;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-item:hover {
+    background: var(--bg-hover);
+}
+
+.sidebar-item.active {
+    background: var(--accent-blue);
+}
+
+.file-list {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+}
+
+.file-item {
+    padding: 6px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.file-item:hover {
+    background: var(--bg-hover);
+}
+
+.file-item.selected {
+    background: var(--accent-blue);
+}
+
+.file-item-icon {
+    font-size: 18px;
+}
+
+.file-item-name {
+    flex: 1;
+}
+
+/* 终端 */
+.terminal-content {
+    padding: 12px;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    background: #1a1a1a;
+    color: #00ff00;
+}
+
+.terminal-line {
+    margin-bottom: 4px;
+}
+
+.terminal-prompt {
+    color: #4a90d9;
+}
+
+.terminal-input-line {
+    display: flex;
+    align-items: center;
+}
+
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #00ff00;
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    padding: 0;
+    margin-left: 4px;
+}
+
+/* 浏览器 */
+.browser-toolbar {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.browser-nav-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.browser-url-bar {
+    flex: 1;
+    padding: 4px 8px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    font-size: 12px;
+}
+
+.browser-content {
+    background: white;
+    color: black;
+    overflow: auto;
+}
+
+.browser-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* 文本编辑器 */
+.text-editor-toolbar {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+}
+
+.text-editor-textarea {
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: none;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+}
+
+/* 计算器 */
+.calculator-content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.calculator-display {
+    padding: 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    text-align: right;
+    font-size: 24px;
+    font-family: 'Courier New', monospace;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.calculator-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.calculator-btn {
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.calculator-btn.operator {
+    background: var(--accent-blue);
+}
+
+.calculator-btn.operator:hover {
+    background: var(--accent-blue-hover);
+}
+
+.calculator-btn.equals {
+    background: #27ae60;
+    grid-column: span 2;
+}
+
+.calculator-btn.equals:hover {
+    background: #2ecc71;
+}
+
+.calculator-btn.clear {
+    background: #e74c3c;
+}
+
+.calculator-btn.clear:hover {
+    background: #c0392b;
+}
+
+/* 系统设置 */
+.settings-content {
+    padding: 20px;
+}
+
+.settings-section {
+    margin-bottom: 24px;
+}
+
+.settings-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--accent-blue);
+}
+
+.settings-item {
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-item-label {
+    font-size: 13px;
+}
+
+.settings-item-control {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* 关于页面 */
+.about-content {
+    padding: 32px;
+    text-align: center;
+}
+
+.about-logo {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.about-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.about-version {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.about-description {
+    max-width: 500px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.about-info {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 16px;
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.about-info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.about-info-item:last-child {
+    border-bottom: none;
+}
+
+.about-info-label {
+    font-weight: 500;
+}
+
+.about-info-value {
+    color: var(--text-secondary);
+}

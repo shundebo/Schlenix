@@ -1,0 +1,160 @@
+/* 窗口样式 */
+
+.window {
+    position: absolute;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    min-height: 200px;
+    z-index: 100;
+}
+
+.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - var(--taskbar-height)) !important;
+    border: none;
+}
+
+.window.active {
+    z-index: 200;
+    border-color: var(--accent-blue);
+}
+
+/* 窗口标题栏 */
+.window-titlebar {
+    height: var(--window-titlebar-height);
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    cursor: move;
+    user-select: none;
+}
+
+.window.active .window-titlebar {
+    background: var(--accent-blue);
+}
+
+.window-title {
+    flex: 1;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.window-icon {
+    font-size: 14px;
+}
+
+/* 窗口控制按钮 */
+.window-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.window-control-btn {
+    width: 24px;
+    height: 20px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+}
+
+.window-control-btn:hover {
+    background: var(--bg-hover);
+}
+
+.window-control-btn.close:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+/* 窗口内容区域 */
+.window-content {
+    flex: 1;
+    overflow: auto;
+    background: var(--bg-primary);
+}
+
+/* 窗口调整大小手柄 */
+.window-resize-handle {
+    position: absolute;
+    background: transparent;
+}
+
+.window-resize-handle.n {
+    top: -3px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    cursor: ns-resize;
+}
+
+.window-resize-handle.s {
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    cursor: ns-resize;
+}
+
+.window-resize-handle.e {
+    top: 0;
+    right: -3px;
+    bottom: 0;
+    width: 6px;
+    cursor: ew-resize;
+}
+
+.window-resize-handle.w {
+    top: 0;
+    left: -3px;
+    bottom: 0;
+    width: 6px;
+    cursor: ew-resize;
+}
+
+.window-resize-handle.ne {
+    top: -3px;
+    right: -3px;
+    width: 10px;
+    height: 10px;
+    cursor: nesw-resize;
+}
+
+.window-resize-handle.nw {
+    top: -3px;
+    left: -3px;
+    width: 10px;
+    height: 10px;
+    cursor: nwse-resize;
+}
+
+.window-resize-handle.se {
+    bottom: -3px;
+    right: -3px;
+    width: 10px;
+    height: 10px;
+    cursor: nwse-resize;
+}
+
+.window-resize-handle.sw {
+    bottom: -3px;
+    left: -3px;
+    width: 10px;
+    height: 10px;
+    cursor: nesw-resize;
+}

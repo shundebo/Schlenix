@@ -1,0 +1,177 @@
+/* 任务栏样式 */
+
+#taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--taskbar-height);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 应用菜单 */
+#app-menu {
+    position: relative;
+}
+
+#menu-button {
+    height: var(--taskbar-height);
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+#menu-button:hover {
+    background: var(--bg-hover);
+}
+
+#menu-button.active {
+    background: var(--bg-active);
+}
+
+.menu-icon {
+    font-size: 16px;
+}
+
+.menu-text {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* 菜单面板 */
+#menu-panel {
+    position: absolute;
+    bottom: var(--taskbar-height);
+    left: 0;
+    width: 280px;
+    max-height: 500px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    overflow-y: auto;
+}
+
+.menu-section {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.menu-section:last-child {
+    border-bottom: none;
+}
+
+.menu-section-title {
+    padding: 4px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.menu-item {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.menu-item:hover {
+    background: var(--bg-hover);
+}
+
+.menu-item-icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.menu-item-text {
+    font-size: 13px;
+}
+
+/* 任务栏窗口列表 */
+#taskbar-windows {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    padding: 0 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#taskbar-windows::-webkit-scrollbar {
+    height: 4px;
+}
+
+.taskbar-window-item {
+    min-width: 160px;
+    max-width: 200px;
+    height: 26px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.taskbar-window-item:hover {
+    background: var(--bg-hover);
+}
+
+.taskbar-window-item.active {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.taskbar-window-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.taskbar-window-title {
+    flex: 1;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 系统托盘 */
+#system-tray {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    height: 100%;
+}
+
+.tray-item {
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.tray-item:hover {
+    background: var(--bg-hover);
+}
+
+#clock {
+    font-family: 'Courier New', monospace;
+    font-weight: 500;
+}
