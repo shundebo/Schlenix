@@ -3,6 +3,7 @@
 class TextEditorApp {
     constructor() {
         this.currentFile = null;
+        this.currentFilePath = null;
         this.modified = false;
     }
 
@@ -18,7 +19,7 @@ class TextEditorApp {
         this.attachEvents(windowId);
     }
 
-    openWithContent(filename, content) {
+    openWithContent(filename, content, filepath = null) {
         const windowId = windowManager.createWindow({
             title: `文本编辑器 - ${filename}`,
             icon: '📝',
@@ -28,6 +29,8 @@ class TextEditorApp {
         });
 
         this.currentFile = filename;
+        this.currentFilePath = filepath;
+        this.modified = false;
         this.attachEvents(windowId);
     }
 
@@ -37,6 +40,7 @@ class TextEditorApp {
                 <button class="te-btn-new" title="新建">📄 新建</button>
                 <button class="te-btn-open" title="打开">📂 打开</button>
                 <button class="te-btn-save" title="保存">💾 保存</button>
+                <button class="te-btn-save-as" title="另存为">💾 另存为</button>
                 <span style="flex: 1;"></span>
                 <button class="te-btn-undo" title="撤销">↶</button>
                 <button class="te-btn-redo" title="重做">↷</button>
@@ -53,6 +57,7 @@ class TextEditorApp {
         const btnNew = content.querySelector('.te-btn-new');
         const btnOpen = content.querySelector('.te-btn-open');
         const btnSave = content.querySelector('.te-btn-save');
+        const btnSaveAs = content.querySelector('.te-btn-save-as');
 
         // 监听文本变化
         textarea.addEventListener('input', () => {
@@ -69,30 +74,79 @@ class TextEditorApp {
             }
             textarea.value = '';
             this.currentFile = null;
+            this.currentFilePath = null;
             this.modified = false;
             this.updateTitle(windowId, '文本编辑器');
         });
 
-        // 打开（模拟）
+        // 打开
         btnOpen.addEventListener('click', () => {
-            alert('打开文件功能：请使用文件管理器双击文本文件打开');
+            const path = prompt('请输入文件路径：', '/home/user/Documents/');
+            if (!path) return;
+
+            const result = storage.readFile(path);
+            if (result.success) {
+                textarea.value = result.content;
+                const parts = path.split('/');
+                this.currentFile = parts[parts.length - 1];
+                this.currentFilePath = path;
+                this.modified = false;
+                this.updateTitle(windowId);
+                notify.success('成功', `文件 "${this.currentFile}" 已打开`);
+            } else {
+                notify.error('错误', result.error);
+            }
         });
 
-        // 保存（模拟）
+        // 保存
         btnSave.addEventListener('click', () => {
-            const content = textarea.value;
-            if (this.currentFile) {
-                alert(`文件 "${this.currentFile}" 已保存（模拟）`);
-            } else {
-                const filename = prompt('请输入文件名：', 'untitled.txt');
-                if (filename) {
-                    this.currentFile = filename;
-                    alert(`文件 "${filename}" 已保存（模拟）`);
-                }
+            this.saveFile(textarea.value, windowId);
+        });
+
+        // 另存为
+        btnSaveAs.addEventListener('click', () => {
+            this.saveFileAs(textarea.value, windowId);
+        });
+
+        // Ctrl+S 保存
+        textarea.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                this.saveFile(textarea.value, windowId);
             }
+        });
+    }
+
+    saveFile(content, windowId) {
+        if (!this.currentFilePath) {
+            return this.saveFileAs(content, windowId);
+        }
+
+        const result = storage.writeFile(this.currentFilePath, content);
+        if (result.success) {
             this.modified = false;
             this.updateTitle(windowId);
-        });
+            notify.success('保存成功', `文件 "${this.currentFile}" 已保存`);
+        } else {
+            notify.error('保存失败', result.error);
+        }
+    }
+
+    saveFileAs(content, windowId) {
+        const path = prompt('请输入保存路径：', '/home/user/Documents/untitled.txt');
+        if (!path) return;
+
+        const result = storage.writeFile(path, content);
+        if (result.success) {
+            const parts = path.split('/');
+            this.currentFile = parts[parts.length - 1];
+            this.currentFilePath = path;
+            this.modified = false;
+            this.updateTitle(windowId);
+            notify.success('保存成功', `文件 "${this.currentFile}" 已保存`);
+        } else {
+            notify.error('保存失败', result.error);
+        }
     }
 
     updateTitle(windowId, title = null) {

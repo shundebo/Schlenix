@@ -4,11 +4,35 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Schlenix 操作系统启动中...');
     
+    // 应用保存的设置
+    applyStoredSettings();
+    
     // 显示欢迎信息
     setTimeout(() => {
         showWelcomeMessage();
     }, 500);
 });
+
+// 应用存储的设置
+function applyStoredSettings() {
+    const settings = storage.get('settings');
+    if (settings) {
+        // 应用壁纸
+        const desktop = document.getElementById('desktop');
+        const wallpapers = {
+            'default': 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+            'blue': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'purple': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            'green': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+        };
+        desktop.style.background = wallpapers[settings.wallpaper] || wallpapers['default'];
+        
+        // 应用动画设置
+        if (!settings.animations) {
+            document.body.style.transition = 'none';
+        }
+    }
+}
 
 // 显示欢迎消息
 function showWelcomeMessage() {
@@ -103,4 +127,3 @@ console.log('快捷键:');
 console.log('  Ctrl+Alt+T - 打开终端');
 console.log('  Ctrl+Alt+F - 打开文件管理器');
 console.log('  Ctrl+Alt+B - 打开浏览器');
-</contents>

@@ -2,7 +2,7 @@
 
 class SettingsApp {
     constructor() {
-        this.settings = {
+        this.settings = storage.get('settings') || {
             theme: 'dark',
             wallpaper: 'default',
             language: 'zh-CN',
@@ -40,10 +40,10 @@ class SettingsApp {
                         <div class="settings-item-label">壁纸</div>
                         <div class="settings-item-control">
                             <select class="setting-wallpaper">
-                                <option value="default">默认渐变</option>
-                                <option value="blue">蓝色</option>
-                                <option value="purple">紫色</option>
-                                <option value="green">绿色</option>
+                                <option value="default" ${this.settings.wallpaper === 'default' ? 'selected' : ''}>默认渐变</option>
+                                <option value="blue" ${this.settings.wallpaper === 'blue' ? 'selected' : ''}>蓝色</option>
+                                <option value="purple" ${this.settings.wallpaper === 'purple' ? 'selected' : ''}>紫色</option>
+                                <option value="green" ${this.settings.wallpaper === 'green' ? 'selected' : ''}>绿色</option>
                             </select>
                         </div>
                     </div>
@@ -70,6 +70,12 @@ class SettingsApp {
                         <div class="settings-item-label">系统信息</div>
                         <div class="settings-item-control">
                             <button class="btn-system-info">查看</button>
+                        </div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-label">清除所有数据</div>
+                        <div class="settings-item-control">
+                            <button class="btn-clear-data" style="background: #e74c3c;">清除</button>
                         </div>
                     </div>
                 </div>
@@ -101,6 +107,7 @@ class SettingsApp {
         const themeSelect = content.querySelector('.setting-theme');
         themeSelect.addEventListener('change', (e) => {
             this.settings.theme = e.target.value;
+            this.saveSettings();
             this.applyTheme(e.target.value);
         });
 
@@ -108,6 +115,7 @@ class SettingsApp {
         const wallpaperSelect = content.querySelector('.setting-wallpaper');
         wallpaperSelect.addEventListener('change', (e) => {
             this.settings.wallpaper = e.target.value;
+            this.saveSettings();
             this.applyWallpaper(e.target.value);
         });
 
@@ -115,6 +123,7 @@ class SettingsApp {
         const animationsCheckbox = content.querySelector('.setting-animations');
         animationsCheckbox.addEventListener('change', (e) => {
             this.settings.animations = e.target.checked;
+            this.saveSettings();
             this.applyAnimations(e.target.checked);
         });
 
@@ -122,7 +131,8 @@ class SettingsApp {
         const languageSelect = content.querySelector('.setting-language');
         languageSelect.addEventListener('change', (e) => {
             this.settings.language = e.target.value;
-            alert('语言切换需要重新加载页面');
+            this.saveSettings();
+            notify.info('提示', '语言切换需要重新加载页面');
         });
 
         // 系统信息
@@ -132,12 +142,26 @@ class SettingsApp {
                 window.apps['about'].open();
             }
         });
+
+        // 清除数据
+        const btnClearData = content.querySelector('.btn-clear-data');
+        btnClearData.addEventListener('click', () => {
+            if (confirm('确定要清除所有数据吗？这将删除所有文件和设置，并重新加载页面。')) {
+                storage.clear();
+                notify.warning('数据已清除', '页面将在 2 秒后重新加载');
+                setTimeout(() => location.reload(), 2000);
+            }
+        });
+    }
+
+    saveSettings() {
+        storage.set('settings', this.settings);
+        notify.success('设置已保存', '您的设置已自动保存');
     }
 
     applyTheme(theme) {
-        // 主题切换功能（可扩展）
         if (theme === 'light') {
-            alert('浅色主题功能开发中...');
+            notify.info('提示', '浅色主题功能开发中...');
         }
     }
 
@@ -160,3 +184,4 @@ class SettingsApp {
 // 注册应用
 if (!window.apps) window.apps = {};
 window.apps['settings'] = new SettingsApp();
+

@@ -90,6 +90,13 @@ class WindowManager {
             this.focusWindow(windowId);
         });
 
+        // 窗口右键菜单
+        titlebar.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.showWindowContextMenu(e.clientX, e.clientY, windowId);
+        });
+
         // 拖动窗口
         let isDragging = false;
         let dragStartX, dragStartY, windowStartX, windowStartY;
@@ -275,6 +282,33 @@ class WindowManager {
         window.element.style.top = Math.max(0, y) + 'px';
     }
 
+    showWindowContextMenu(x, y, windowId) {
+        const window = this.windows.get(windowId);
+        if (!window) return;
+
+        const items = [
+            {
+                icon: '↕️',
+                label: window.maximized ? '还原' : '最大化',
+                action: () => this.toggleMaximize(windowId)
+            },
+            {
+                icon: '−',
+                label: '最小化',
+                action: () => this.minimizeWindow(windowId)
+            },
+            { separator: true },
+            {
+                icon: '×',
+                label: '关闭',
+                shortcut: 'Alt+F4',
+                action: () => this.closeWindow(windowId)
+            }
+        ];
+
+        contextMenu.show(x, y, items);
+    }
+
     updateTaskbar() {
         const taskbarWindows = document.getElementById('taskbar-windows');
         taskbarWindows.innerHTML = '';
@@ -299,6 +333,12 @@ class WindowManager {
                 } else {
                     this.focusWindow(id);
                 }
+            });
+
+            // 任务栏项目右键菜单
+            item.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                this.showWindowContextMenu(e.clientX, e.clientY, id);
             });
             
             taskbarWindows.appendChild(item);

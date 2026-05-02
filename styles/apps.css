@@ -21,7 +21,8 @@
 
 .file-manager-content {
     display: flex;
-    height: 100%;
+    flex: 1;
+    overflow: hidden;
 }
 
 .file-manager-sidebar {
@@ -29,6 +30,7 @@
     background: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
     padding: 8px;
+    overflow-y: auto;
 }
 
 .sidebar-item {
@@ -77,6 +79,24 @@
 
 .file-item-name {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-item-size {
+    width: 80px;
+    text-align: right;
+    font-size: 11px;
+    color: var(--text-secondary);
+}
+
+.file-item-modified {
+    width: 150px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: right;
 }
 
 /* 终端 */
@@ -87,6 +107,16 @@
     line-height: 1.5;
     background: #1a1a1a;
     color: #00ff00;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.terminal-output {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 8px;
 }
 
 .terminal-line {
@@ -138,9 +168,11 @@
 }
 
 .browser-content {
+    flex: 1;
     background: white;
     color: black;
-    overflow: auto;
+    overflow: hidden;
+    display: flex;
 }
 
 .browser-iframe {
@@ -178,6 +210,8 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .calculator-display {
@@ -233,6 +267,8 @@
 /* 系统设置 */
 .settings-content {
     padding: 20px;
+    overflow-y: auto;
+    height: 100%;
 }
 
 .settings-section {
@@ -270,6 +306,8 @@
 .about-content {
     padding: 32px;
     text-align: center;
+    overflow-y: auto;
+    height: 100%;
 }
 
 .about-logo {

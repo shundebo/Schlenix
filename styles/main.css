@@ -118,21 +118,49 @@ input:focus, textarea:focus, select:focus {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-lg);
-    min-width: 180px;
+    min-width: 200px;
     z-index: 10000;
     padding: 4px 0;
+    border-radius: 4px;
 }
 
 .context-menu-item {
-    padding: 6px 16px;
+    padding: 8px 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    transition: background 0.15s ease;
 }
 
 .context-menu-item:hover {
     background: var(--bg-hover);
+}
+
+.context-menu-item.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.context-menu-item.disabled:hover {
+    background: transparent;
+}
+
+.context-menu-icon {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.context-menu-text {
+    flex: 1;
+    font-size: 13px;
+}
+
+.context-menu-shortcut {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-family: monospace;
 }
 
 .context-menu-separator {

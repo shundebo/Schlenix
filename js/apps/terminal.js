@@ -67,6 +67,17 @@ class TerminalApp {
                     this.historyIndex = this.history.length;
                     input.value = '';
                 }
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                // 简单的命令自动补全
+                const commands = ['help', 'clear', 'echo', 'date', 'whoami', 'pwd', 'ls', 'cat', 'neofetch', 'about', 'uname', 'uptime', 'free', 'df', 'ps', 'history'];
+                const partial = input.value.toLowerCase();
+                const matches = commands.filter(cmd => cmd.startsWith(partial));
+                if (matches.length === 1) {
+                    input.value = matches[0];
+                } else if (matches.length > 1) {
+                    this.addLine(output, matches.join('  '));
+                }
             }
         });
     }
@@ -88,8 +99,18 @@ class TerminalApp {
                 this.addLine(output, '  date       - 显示当前日期时间');
                 this.addLine(output, '  whoami     - 显示当前用户');
                 this.addLine(output, '  pwd        - 显示当前路径');
+                this.addLine(output, '  cd         - 切换目录');
                 this.addLine(output, '  ls         - 列出文件');
                 this.addLine(output, '  cat        - 显示文件内容');
+                this.addLine(output, '  mkdir      - 创建目录');
+                this.addLine(output, '  touch      - 创建文件');
+                this.addLine(output, '  rm         - 删除文件或目录 (使用 -r 递归删除)');
+                this.addLine(output, '  uname      - 显示系统信息');
+                this.addLine(output, '  uptime     - 显示系统运行时间');
+                this.addLine(output, '  free       - 显示内存使用情况');
+                this.addLine(output, '  df         - 显示磁盘使用情况');
+                this.addLine(output, '  ps         - 显示进程列表');
+                this.addLine(output, '  history    - 显示命令历史');
                 this.addLine(output, '  neofetch   - 显示系统信息');
                 this.addLine(output, '  about      - 关于 Schlenix');
                 break;
@@ -115,21 +136,144 @@ class TerminalApp {
                 break;
 
             case 'ls':
-                this.addLine(output, 'Documents  Downloads  Pictures  Music  Videos');
+                const lsPath = args[0] || this.currentPath;
+                const lsResult = storage.ls(lsPath);
+                if (lsResult.success) {
+                    const items = Object.entries(lsResult.items).map(([name, item]) => {
+                        const icon = item.type === 'directory' ? '📁' : '📄';
+                        return `${icon} ${name}`;
+                    });
+                    if (items.length > 0) {
+                        items.forEach(item => this.addLine(output, item));
+                    } else {
+                        this.addLine(output, '(空目录)');
+                    }
+                } else {
+                    this.addLine(output, `ls: ${lsResult.error}`);
+                }
                 break;
 
             case 'cat':
                 if (args.length === 0) {
                     this.addLine(output, 'cat: 缺少文件名');
                 } else {
-                    this.addLine(output, `cat: ${args[0]}: 文件不存在`);
+                    const catPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const catResult = storage.readFile(catPath);
+                    if (catResult.success) {
+                        catResult.content.split('\n').forEach(line => this.addLine(output, line));
+                    } else {
+                        this.addLine(output, `cat: ${catResult.error}`);
+                    }
                 }
+                break;
+
+            case 'mkdir':
+                if (args.length === 0) {
+                    this.addLine(output, 'mkdir: 缺少目录名');
+                } else {
+                    const mkdirPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const mkdirResult = storage.mkdir(mkdirPath);
+                    if (mkdirResult.success) {
+                        this.addLine(output, `已创建目录: ${args[0]}`);
+                    } else {
+                        this.addLine(output, `mkdir: ${mkdirResult.error}`);
+                    }
+                }
+                break;
+
+            case 'touch':
+                if (args.length === 0) {
+                    this.addLine(output, 'touch: 缺少文件名');
+                } else {
+                    const touchPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const touchResult = storage.touch(touchPath);
+                    if (touchResult.success) {
+                        this.addLine(output, `已创建文件: ${args[0]}`);
+                    } else {
+                        this.addLine(output, `touch: ${touchResult.error}`);
+                    }
+                }
+                break;
+
+            case 'rm':
+                if (args.length === 0) {
+                    this.addLine(output, 'rm: 缺少文件名');
+                } else {
+                    const recursive = args.includes('-r') || args.includes('-rf');
+                    const filename = args.find(arg => !arg.startsWith('-'));
+                    if (!filename) {
+                        this.addLine(output, 'rm: 缺少文件名');
+                        break;
+                    }
+                    const rmPath = filename.startsWith('/') ? filename : this.currentPath + '/' + filename;
+                    const rmResult = storage.rm(rmPath, recursive);
+                    if (rmResult.success) {
+                        this.addLine(output, `已删除: ${filename}`);
+                    } else {
+                        this.addLine(output, `rm: ${rmResult.error}`);
+                    }
+                }
+                break;
+
+            case 'cd':
+                if (args.length === 0) {
+                    this.currentPath = '/home/user';
+                } else {
+                    const newPath = args[0].startsWith('/') ? args[0] : this.currentPath + '/' + args[0];
+                    const node = storage.getNode(newPath);
+                    if (node && node.type === 'directory') {
+                        this.currentPath = newPath;
+                    } else {
+                        this.addLine(output, `cd: ${args[0]}: 目录不存在`);
+                    }
+                }
+                break;
+
+            case 'uname':
+                if (args.includes('-a')) {
+                    this.addLine(output, 'Schlenix 1.0.0 WebKit x86_64 GNU/Linux');
+                } else {
+                    this.addLine(output, 'Schlenix');
+                }
+                break;
+
+            case 'uptime':
+                const uptime = Math.floor(performance.now() / 1000);
+                const hours = Math.floor(uptime / 3600);
+                const minutes = Math.floor((uptime % 3600) / 60);
+                const seconds = uptime % 60;
+                this.addLine(output, `up ${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
+                break;
+
+            case 'free':
+                const memory = navigator.deviceMemory || 4;
+                this.addLine(output, '              total        used        free');
+                this.addLine(output, `Mem:          ${memory}GB        2GB         ${memory - 2}GB`);
+                break;
+
+            case 'df':
+                this.addLine(output, 'Filesystem     Size  Used Avail Use% Mounted on');
+                this.addLine(output, '/dev/sda1      100G   42G   58G  42% /');
+                this.addLine(output, 'tmpfs          2.0G  1.2M  2.0G   1% /tmp');
+                break;
+
+            case 'ps':
+                this.addLine(output, '  PID TTY          TIME CMD');
+                this.addLine(output, '    1 ?        00:00:01 systemd');
+                this.addLine(output, '  123 pts/0    00:00:00 bash');
+                this.addLine(output, '  456 pts/0    00:00:00 schlenix');
+                break;
+
+            case 'history':
+                this.history.forEach((cmd, index) => {
+                    this.addLine(output, `  ${index + 1}  ${cmd}`);
+                });
                 break;
 
             case 'neofetch':
                 this.addLine(output, '       _,met$$$$$gg.          user@schlenix');
                 this.addLine(output, '    ,g$$$$$$$$$$$$$$$P.       ---------------');
-                this.addLine(output, '  ,g$$P"     """Y$$.".        OS: Schlenix 1.0');
+                this.addLine(output, '  ,g$$P"     """Y$$."."        OS: Schlenix 1.0');
                 this.addLine(output, ' ,$$P\'              `$$$.     Kernel: WebKit');
                 this.addLine(output, '\',$$P       ,ggs.     `$$b:   Uptime: ' + Math.floor(performance.now() / 1000) + ' seconds');
                 this.addLine(output, ' `d$$\'     ,$P"\'   .    $$$    Shell: schsh');
