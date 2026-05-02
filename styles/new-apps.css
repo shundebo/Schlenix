@@ -1,0 +1,384 @@
+/* Markdown 预览器 */
+.markdown-viewer-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.markdown-toolbar {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+}
+
+.md-btn-open, .md-btn-save, .md-btn-export, .md-btn-upload {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.markdown-editor-container {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+.markdown-editor-pane, .markdown-preview-pane {
+    flex: 1;
+    overflow: auto;
+}
+
+.markdown-editor-pane {
+    border-right: 1px solid var(--border-color);
+}
+
+.markdown-editor {
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    outline: none;
+}
+
+.markdown-preview {
+    padding: 16px;
+    line-height: 1.6;
+}
+
+.markdown-preview h1 { font-size: 32px; margin: 20px 0 10px; }
+.markdown-preview h2 { font-size: 24px; margin: 18px 0 8px; }
+.markdown-preview h3 { font-size: 20px; margin: 16px 0 6px; }
+.markdown-preview code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+.markdown-preview pre { background: var(--bg-secondary); padding: 12px; border-radius: 4px; overflow-x: auto; }
+.markdown-preview blockquote { border-left: 4px solid var(--accent-blue); margin: 0; padding-left: 16px; color: var(--text-secondary); }
+.markdown-preview a { color: var(--accent-blue); text-decoration: none; }
+.markdown-preview a:hover { text-decoration: underline; }
+.markdown-preview img { max-width: 100%; }
+.markdown-preview ul, .markdown-preview ol { padding-left: 24px; }
+
+/* 番茄钟 */
+.pomodoro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    height: 100%;
+}
+
+.pomodoro-mode-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+}
+
+.pomo-tab {
+    padding: 10px 20px;
+    background: var(--bg-secondary);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pomo-tab:hover {
+    background: var(--bg-hover);
+}
+
+.pomo-tab.active {
+    background: var(--accent-blue);
+}
+
+.pomodoro-timer {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.timer-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.pomodoro-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.pomo-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.pomodoro-stats {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.pomodoro-settings {
+    width: 100%;
+    max-width: 300px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.setting-item label {
+    font-size: 13px;
+}
+
+.setting-item input {
+    width: 60px;
+    padding: 4px 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    text-align: center;
+}
+
+/* 主题编辑器 */
+.theme-editor-container {
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.theme-presets {
+    margin-bottom: 20px;
+}
+
+.theme-presets label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.theme-preset-select {
+    width: 100%;
+    padding: 8px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 4px;
+}
+
+.theme-colors {
+    margin-bottom: 20px;
+}
+
+.color-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.color-item label {
+    width: 120px;
+    font-size: 13px;
+}
+
+.color-input {
+    width: 60px;
+    height: 36px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.color-text {
+    flex: 1;
+    padding: 6px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: monospace;
+}
+
+.theme-preview {
+    margin-bottom: 20px;
+}
+
+.preview-title {
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.preview-box {
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+}
+
+.preview-window {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.preview-titlebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.preview-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.preview-content {
+    padding: 16px;
+}
+
+.preview-button {
+    padding: 8px 16px;
+    background: var(--accent-blue);
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.theme-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.theme-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+
+/* 画板应用 */
+.paint-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.paint-toolbar {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.tool-group {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.paint-tool {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.paint-tool:hover {
+    background: var(--bg-hover);
+}
+
+.paint-tool.active {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.paint-color {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.paint-width {
+    width: 100px;
+}
+
+.width-display {
+    font-size: 12px;
+    color: var(--text-secondary);
+    min-width: 40px;
+}
+
+.paint-btn {
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+.paint-canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    overflow: auto;
+}
+
+.paint-canvas {
+    border: 2px solid var(--border-color);
+    cursor: crosshair;
+    background: white;
+}
+
+/* 播放列表添加按钮 */
+.playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.playlist-add-btn {
+    cursor: pointer;
+    padding: 4px 8px;
+    background: var(--accent-blue);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background 0.15s ease;
+}
+
+.playlist-add-btn:hover {
+    background: var(--accent-blue-hover);
+}
+
+/* 图片查看器上传按钮 */
+.iv-btn-upload {
+    cursor: pointer;
+}

@@ -52,7 +52,13 @@ class MusicPlayerApp {
                     <input type="range" class="music-volume-bar" min="0" max="100" value="70">
                 </div>
                 <div class="music-playlist">
-                    <div class="playlist-header">播放列表</div>
+                    <div class="playlist-header">
+                        <span>播放列表</span>
+                        <label class="playlist-add-btn" title="添加本地音乐">
+                            ➕
+                            <input type="file" accept="audio/*" multiple style="display:none" class="music-file-input">
+                        </label>
+                    </div>
                     <div class="playlist-items"></div>
                 </div>
             </div>
@@ -84,6 +90,25 @@ class MusicPlayerApp {
 
         // 渲染播放列表
         this.renderPlaylist(windowId);
+
+        // 本地音乐文件上传
+        const fileInput = content.querySelector('.music-file-input');
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.type.startsWith('audio/')) {
+                    const url = URL.createObjectURL(file);
+                    instance.playlist.push({
+                        title: file.name.replace(/\.[^/.]+$/, ''),
+                        artist: '本地音乐',
+                        duration: 0,
+                        url: url
+                    });
+                }
+            });
+            this.renderPlaylist(windowId);
+            notify.success('成功', `已添加 ${files.length} 首音乐`);
+        });
 
         // 播放/暂停
         btnPlay.addEventListener('click', () => this.togglePlay(windowId));
@@ -206,12 +231,25 @@ class MusicPlayerApp {
         titleEl.textContent = track.title;
         artistEl.textContent = track.artist;
 
-        // 模拟播放
-        notify.info('正在播放', `${track.title} - ${track.artist}`);
-        
-        const btnPlay = content.querySelector('.music-play');
-        btnPlay.textContent = '⏸️';
-        instance.isPlaying = true;
+        // 如果有真实音频URL，播放它
+        if (track.url) {
+            instance.audio.src = track.url;
+            instance.audio.play().then(() => {
+                instance.isPlaying = true;
+                const btnPlay = content.querySelector('.music-play');
+                btnPlay.textContent = '⏸️';
+                notify.info('正在播放', `${track.title} - ${track.artist}`);
+            }).catch(err => {
+                notify.error('播放失败', '无法播放此音频文件');
+                console.error('Audio play error:', err);
+            });
+        } else {
+            // 模拟播放（示例歌曲）
+            notify.info('正在播放', `${track.title} - ${track.artist}`);
+            const btnPlay = content.querySelector('.music-play');
+            btnPlay.textContent = '⏸️';
+            instance.isPlaying = true;
+        }
 
         this.renderPlaylist(windowId);
     }

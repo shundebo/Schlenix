@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="styles/window.css">
     <link rel="stylesheet" href="styles/taskbar.css">
     <link rel="stylesheet" href="styles/apps.css">
+    <link rel="stylesheet" href="styles/new-apps.css">
 </head>
 <body>
     <!-- 桌面背景 -->
@@ -78,6 +79,22 @@
             <div class="desktop-icon" data-app="minesweeper-game">
                 <div class="icon-image">💣</div>
                 <div class="icon-label">扫雷</div>
+            </div>
+            <div class="desktop-icon" data-app="markdown-viewer">
+                <div class="icon-image">📝</div>
+                <div class="icon-label">Markdown</div>
+            </div>
+            <div class="desktop-icon" data-app="pomodoro">
+                <div class="icon-image">🍅</div>
+                <div class="icon-label">番茄钟</div>
+            </div>
+            <div class="desktop-icon" data-app="theme-editor">
+                <div class="icon-image">🎨</div>
+                <div class="icon-label">主题编辑器</div>
+            </div>
+            <div class="desktop-icon" data-app="paint">
+                <div class="icon-image">🖌️</div>
+                <div class="icon-label">画板</div>
             </div>
         </div>
 
@@ -172,6 +189,25 @@
                     </div>
                 </div>
                 <div class="menu-section">
+                    <div class="menu-section-title">工具</div>
+                    <div class="menu-item" data-app="markdown-viewer">
+                        <span class="menu-item-icon">📝</span>
+                        <span class="menu-item-text">Markdown 预览器</span>
+                    </div>
+                    <div class="menu-item" data-app="pomodoro">
+                        <span class="menu-item-icon">🍅</span>
+                        <span class="menu-item-text">番茄钟</span>
+                    </div>
+                    <div class="menu-item" data-app="theme-editor">
+                        <span class="menu-item-icon">🎨</span>
+                        <span class="menu-item-text">主题编辑器</span>
+                    </div>
+                    <div class="menu-item" data-app="paint">
+                        <span class="menu-item-icon">🖌️</span>
+                        <span class="menu-item-text">画板</span>
+                    </div>
+                </div>
+                <div class="menu-section">
                     <div class="menu-section-title">关于</div>
                     <div class="menu-item" data-app="about">
                         <span class="menu-item-icon">ℹ️</span>
@@ -216,6 +252,10 @@
     <script src="js/apps/tetris-game.js"></script>
     <script src="js/apps/2048-game.js"></script>
     <script src="js/apps/minesweeper-game.js"></script>
+    <script src="js/apps/markdown-viewer.js"></script>
+    <script src="js/apps/pomodoro.js"></script>
+    <script src="js/apps/theme-editor.js"></script>
+    <script src="js/apps/paint.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

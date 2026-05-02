@@ -32,6 +32,10 @@ class ImageViewerApp {
         return `
             <div class="image-viewer-toolbar">
                 <button class="iv-btn-open" title="打开图片">📂 打开</button>
+                <label class="iv-btn-upload" title="本地文件">
+                    📁 本地
+                    <input type="file" accept="image/*" style="display:none" class="iv-file-input">
+                </label>
                 <button class="iv-btn-zoom-in" title="放大">🔍+</button>
                 <button class="iv-btn-zoom-out" title="缩小">🔍-</button>
                 <button class="iv-btn-zoom-reset" title="实际大小">1:1</button>
@@ -51,6 +55,7 @@ class ImageViewerApp {
         if (!content) return;
 
         const btnOpen = content.querySelector('.iv-btn-open');
+        const fileInput = content.querySelector('.iv-file-input');
         const btnZoomIn = content.querySelector('.iv-btn-zoom-in');
         const btnZoomOut = content.querySelector('.iv-btn-zoom-out');
         const btnZoomReset = content.querySelector('.iv-btn-zoom-reset');
@@ -59,6 +64,30 @@ class ImageViewerApp {
         const btnFullscreen = content.querySelector('.iv-btn-fullscreen');
 
         btnOpen.addEventListener('click', () => this.openImage(windowId));
+        
+        // 本地文件上传
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const content = windowManager.getWindowContent(windowId);
+                    const imageContent = content.querySelector('.image-viewer-content');
+                    const instance = this.instances.get(windowId);
+                    
+                    imageContent.innerHTML = `<img src="${event.target.result}" class="image-viewer-img" alt="图片">`;
+                    if (instance) {
+                        instance.currentImage = event.target.result;
+                        instance.zoom = 100;
+                        instance.rotation = 0;
+                        this.updateTransform(windowId);
+                    }
+                    notify.success('成功', `已加载 ${file.name}`);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
         btnZoomIn.addEventListener('click', () => this.zoom(windowId, 10));
         btnZoomOut.addEventListener('click', () => this.zoom(windowId, -10));
         btnZoomReset.addEventListener('click', () => this.resetZoom(windowId));
