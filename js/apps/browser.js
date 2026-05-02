@@ -252,8 +252,8 @@ class BrowserApp {
             if (url.includes('.') || url.startsWith('localhost')) {
                 url = 'https://' + url;
             } else {
-                // 搜索
-                url = `https://www.google.com/search?q=${encodeURIComponent(url)}`;
+                // 使用 Bing 搜索
+                url = `https://www.bing.com/search?q=${encodeURIComponent(url)}`;
             }
         }
 

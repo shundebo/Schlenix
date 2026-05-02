@@ -821,3 +821,558 @@
     font-size: 12px;
     color: var(--text-secondary);
 }
+
+/* 时钟应用 */
+.clock-tabs {
+    display: flex;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.clock-tab {
+    flex: 1;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.clock-tab:hover {
+    background: var(--bg-hover);
+}
+
+.clock-tab.active {
+    background: var(--accent-blue);
+}
+
+.clock-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clock-tab-content {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.clock-display {
+    text-align: center;
+}
+
+.clock-time {
+    font-size: 48px;
+    font-weight: 600;
+    font-family: monospace;
+}
+
+.clock-date {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+.stopwatch-display,
+.timer-display {
+    font-size: 56px;
+    font-weight: 600;
+    font-family: monospace;
+    margin: 20px 0;
+}
+
+.stopwatch-controls,
+.timer-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.stopwatch-laps {
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.stopwatch-lap {
+    padding: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.timer-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+}
+
+.timer-input input {
+    width: 60px;
+    padding: 8px;
+    text-align: center;
+    font-size: 24px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+}
+
+/* 天气应用 */
+.weather-header {
+    padding: 12px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 8px;
+}
+
+.weather-search {
+    flex: 1;
+    padding: 8px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.weather-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.weather-loading {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-secondary);
+}
+
+.weather-current {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.weather-city {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.weather-icon {
+    font-size: 80px;
+    margin: 20px 0;
+}
+
+.weather-temp {
+    font-size: 48px;
+    font-weight: 600;
+}
+
+.weather-condition {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+.weather-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.weather-detail-item {
+    background: var(--bg-secondary);
+    padding: 16px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.detail-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.detail-value {
+    display: block;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.aqi-good { color: #27ae60; }
+.aqi-moderate { color: #f39c12; }
+.aqi-unhealthy-sensitive { color: #e67e22; }
+.aqi-unhealthy { color: #e74c3c; }
+
+.weather-forecast {
+    background: var(--bg-secondary);
+    padding: 16px;
+    border-radius: 4px;
+}
+
+.forecast-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.forecast-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.forecast-item:last-child {
+    border-bottom: none;
+}
+
+.forecast-day {
+    width: 60px;
+}
+
+.forecast-icon {
+    font-size: 24px;
+    margin: 0 20px;
+}
+
+.forecast-temp {
+    margin-left: auto;
+}
+
+.forecast-text {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.weather-location {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.weather-feels-like {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+}
+
+.weather-update {
+    text-align: center;
+    padding: 12px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+}
+
+.weather-error {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.error-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #e74c3c;
+}
+
+.error-hint {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.aqi-very-unhealthy { color: #9b59b6; }
+.aqi-hazardous { color: #8b0000; }
+
+/* 音乐播放器 */
+.music-player-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+}
+
+.music-cover {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.music-cover-placeholder {
+    font-size: 80px;
+}
+
+.music-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.music-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.music-artist {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.music-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.music-time-current,
+.music-time-total {
+    font-size: 12px;
+    font-family: monospace;
+    color: var(--text-secondary);
+}
+
+.music-progress-bar {
+    flex: 1;
+}
+
+.music-controls {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.music-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.music-btn:hover {
+    background: var(--bg-hover);
+    transform: scale(1.1);
+}
+
+.music-btn.active {
+    background: var(--accent-blue);
+}
+
+.music-volume {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.music-volume-bar {
+    flex: 1;
+}
+
+.music-playlist {
+    flex: 1;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.playlist-header {
+    padding: 12px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.playlist-items {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.playlist-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.playlist-item:hover {
+    background: var(--bg-hover);
+}
+
+.playlist-item.active {
+    background: var(--accent-blue);
+}
+
+.playlist-number {
+    width: 30px;
+    color: var(--text-secondary);
+}
+
+.playlist-track-info {
+    flex: 1;
+}
+
+.playlist-track-title {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.playlist-track-artist {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.playlist-duration {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* 系统监控 */
+.monitor-container {
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.monitor-section {
+    margin-bottom: 30px;
+}
+
+.monitor-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.monitor-chart {
+    width: 100%;
+    background: #1a1a1a;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.monitor-value {
+    text-align: right;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent-blue);
+}
+
+.monitor-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.stat-item {
+    background: var(--bg-secondary);
+    padding: 16px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* 快捷方式管理器 */
+.shortcuts-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.shortcuts-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shortcuts-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.shortcut-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.shortcut-item.disabled {
+    opacity: 0.5;
+}
+
+.shortcut-info {
+    flex: 1;
+}
+
+.shortcut-key {
+    font-family: monospace;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.shortcut-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.shortcut-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.shortcut-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+}
+
+.shortcuts-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}

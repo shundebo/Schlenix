@@ -153,6 +153,46 @@ document.addEventListener('keydown', (e) => {
             window.apps['image-viewer'].open();
         }
     }
+
+    // Ctrl/Cmd + Alt + C: 打开时钟
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'c') {
+        e.preventDefault();
+        if (window.apps['clock']) {
+            window.apps['clock'].open();
+        }
+    }
+
+    // Ctrl/Cmd + Alt + W: 打开天气
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'w') {
+        e.preventDefault();
+        if (window.apps['weather']) {
+            window.apps['weather'].open();
+        }
+    }
+
+    // Ctrl/Cmd + Alt + P: 打开音乐播放器
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'p') {
+        e.preventDefault();
+        if (window.apps['music-player']) {
+            window.apps['music-player'].open();
+        }
+    }
+
+    // Ctrl/Cmd + Alt + S: 打开系统监控
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 's') {
+        e.preventDefault();
+        if (window.apps['system-monitor']) {
+            window.apps['system-monitor'].open();
+        }
+    }
+
+    // Ctrl/Cmd + Alt + K: 打开快捷方式管理器
+    if ((e.ctrlKey || e.metaKey) && e.altKey && e.key === 'k') {
+        e.preventDefault();
+        if (window.apps['shortcuts-manager']) {
+            window.apps['shortcuts-manager'].open();
+        }
+    }
 });
 
 console.log('Schlenix 操作系统已就绪！');
@@ -163,3 +203,8 @@ console.log('  Ctrl+Alt+B - 打开浏览器');
 console.log('  Ctrl+Alt+N - 打开记事本');
 console.log('  Ctrl+Alt+M - 打开任务管理器');
 console.log('  Ctrl+Alt+I - 打开图片查看器');
+console.log('  Ctrl+Alt+C - 打开时钟');
+console.log('  Ctrl+Alt+W - 打开天气');
+console.log('  Ctrl+Alt+P - 打开音乐播放器');
+console.log('  Ctrl+Alt+S - 打开系统监控');
+console.log('  Ctrl+Alt+K - 打开快捷方式管理器');
