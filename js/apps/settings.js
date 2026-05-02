@@ -2,15 +2,23 @@
 
 class SettingsApp {
     constructor() {
-        this.settings = storage.get('settings') || {
-            theme: 'dark',
-            wallpaper: 'default',
-            language: 'zh-CN',
-            animations: true
-        };
+        this.settings = null;
+    }
+
+    getSettings() {
+        if (!this.settings) {
+            this.settings = storage.get('settings') || {
+                theme: 'dark',
+                wallpaper: 'default',
+                language: 'zh-CN',
+                animations: true
+            };
+        }
+        return this.settings;
     }
 
     open() {
+        this.getSettings();
         const windowId = windowManager.createWindow({
             title: '系统设置',
             icon: '⚙️',
@@ -23,6 +31,7 @@ class SettingsApp {
     }
 
     getContent() {
+        const settings = this.getSettings();
         return `
             <div class="settings-content">
                 <div class="settings-section">
@@ -31,8 +40,8 @@ class SettingsApp {
                         <div class="settings-item-label">主题</div>
                         <div class="settings-item-control">
                             <select class="setting-theme">
-                                <option value="dark" ${this.settings.theme === 'dark' ? 'selected' : ''}>深色</option>
-                                <option value="light" ${this.settings.theme === 'light' ? 'selected' : ''}>浅色</option>
+                                <option value="dark" ${settings.theme === 'dark' ? 'selected' : ''}>深色</option>
+                                <option value="light" ${settings.theme === 'light' ? 'selected' : ''}>浅色</option>
                             </select>
                         </div>
                     </div>
@@ -40,17 +49,17 @@ class SettingsApp {
                         <div class="settings-item-label">壁纸</div>
                         <div class="settings-item-control">
                             <select class="setting-wallpaper">
-                                <option value="default" ${this.settings.wallpaper === 'default' ? 'selected' : ''}>默认渐变</option>
-                                <option value="blue" ${this.settings.wallpaper === 'blue' ? 'selected' : ''}>蓝色</option>
-                                <option value="purple" ${this.settings.wallpaper === 'purple' ? 'selected' : ''}>紫色</option>
-                                <option value="green" ${this.settings.wallpaper === 'green' ? 'selected' : ''}>绿色</option>
+                                <option value="default" ${settings.wallpaper === 'default' ? 'selected' : ''}>默认渐变</option>
+                                <option value="blue" ${settings.wallpaper === 'blue' ? 'selected' : ''}>蓝色</option>
+                                <option value="purple" ${settings.wallpaper === 'purple' ? 'selected' : ''}>紫色</option>
+                                <option value="green" ${settings.wallpaper === 'green' ? 'selected' : ''}>绿色</option>
                             </select>
                         </div>
                     </div>
                     <div class="settings-item">
                         <div class="settings-item-label">动画效果</div>
                         <div class="settings-item-control">
-                            <input type="checkbox" class="setting-animations" ${this.settings.animations ? 'checked' : ''}>
+                            <input type="checkbox" class="setting-animations" ${settings.animations ? 'checked' : ''}>
                         </div>
                     </div>
                 </div>
@@ -61,8 +70,8 @@ class SettingsApp {
                         <div class="settings-item-label">语言</div>
                         <div class="settings-item-control">
                             <select class="setting-language">
-                                <option value="zh-CN" ${this.settings.language === 'zh-CN' ? 'selected' : ''}>简体中文</option>
-                                <option value="en-US" ${this.settings.language === 'en-US' ? 'selected' : ''}>English</option>
+                                <option value="zh-CN" ${settings.language === 'zh-CN' ? 'selected' : ''}>简体中文</option>
+                                <option value="en-US" ${settings.language === 'en-US' ? 'selected' : ''}>English</option>
                             </select>
                         </div>
                     </div>
@@ -176,7 +185,7 @@ class SettingsApp {
         desktop.style.background = wallpapers[wallpaper] || wallpapers['default'];
     }
 
-    applyAnimations(enabled) {
+    apphgeAnimations(enabled) {
         document.body.style.transition = enabled ? 'all 0.3s ease' : 'none';
     }
 }

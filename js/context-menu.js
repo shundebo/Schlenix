@@ -70,4 +70,14 @@ class ContextMenu {
 }
 
 // 全局右键菜单实例
-const contextMenu = new ContextMenu();
+let contextMenu;
+try {
+    contextMenu = new ContextMenu();
+    console.log('Context menu initialized successfully');
+} catch (e) {
+    console.error('Failed to initialize context menu:', e);
+    contextMenu = {
+        show: () => {},
+        hide: () => {}
+    };
+}

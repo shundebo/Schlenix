@@ -3,14 +3,23 @@
 // 初始化系统
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Schlenix 操作系统启动中...');
+    console.log('Storage:', typeof storage);
+    console.log('Notify:', typeof notify);
+    console.log('ContextMenu:', typeof contextMenu);
+    console.log('WindowManager:', typeof windowManager);
+    console.log('Apps:', window.apps);
     
     // 应用保存的设置
     applyStoredSettings();
     
-    // 显示欢迎信息
-    setTimeout(() => {
-        showWelcomeMessage();
-    }, 500);
+    // 首次启动显示欢迎信息
+    const hasSeenWelcome = storage.get('hasSeenWelcome');
+    if (!hasSeenWelcome) {
+        setTimeout(() => {
+            showWelcomeMessage();
+            storage.set('hasSeenWelcome', true);
+        }, 500);
+    }
 });
 
 // 应用存储的设置

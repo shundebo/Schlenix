@@ -2,9 +2,7 @@
 
 class TextEditorApp {
     constructor() {
-        this.currentFile = null;
-        this.currentFilePath = null;
-        this.modified = false;
+        this.instances = new Map(); // 存储每个窗口的状态
     }
 
     open() {
@@ -14,6 +12,12 @@ class TextEditorApp {
             width: 700,
             height: 500,
             content: this.getContent()
+        });
+
+        this.instances.set(windowId, {
+            currentFile: null,
+            currentFilePath: null,
+            modified: false
         });
 
         this.attachEvents(windowId);
@@ -28,9 +32,12 @@ class TextEditorApp {
             content: this.getContent(content)
         });
 
-        this.currentFile = filename;
-        this.currentFilePath = filepath;
-        this.modified = false;
+        this.instances.set(windowId, {
+            currentFile: filename,
+            currentFilePath: filepath,
+            modified: false
+        });
+
         this.attachEvents(windowId);
     }
 
@@ -59,40 +66,42 @@ class TextEditorApp {
         const btnSave = content.querySelector('.te-btn-save');
         const btnSaveAs = content.querySelector('.te-btn-save-as');
 
+        const instance = this.instances.get(windowId);
+
         // 监听文本变化
         textarea.addEventListener('input', () => {
-            this.modified = true;
+            instance.modified = true;
             this.updateTitle(windowId);
         });
 
         // 新建
         btnNew.addEventListener('click', () => {
-            if (this.modified) {
+            if (instance.modified) {
                 if (!confirm('当前文档未保存，确定要新建吗？')) {
                     return;
                 }
             }
             textarea.value = '';
-            this.currentFile = null;
-            this.currentFilePath = null;
-            this.modified = false;
+            instance.currentFile = null;
+            instance.currentFilePath = null;
+            instance.modified = false;
             this.updateTitle(windowId, '文本编辑器');
         });
 
         // 打开
         btnOpen.addEventListener('click', () => {
-            const path = prompt('请输入文件路径：', '/home/user/Documents/');
+            const path = prompt('请输入文件路径：', '/home/user/Documents/welcome.txt');
             if (!path) return;
 
             const result = storage.readFile(path);
             if (result.success) {
                 textarea.value = result.content;
                 const parts = path.split('/');
-                this.currentFile = parts[parts.length - 1];
-                this.currentFilePath = path;
-                this.modified = false;
+                instance.currentFile = parts[parts.length - 1];
+                instance.currentFilePath = path;
+                instance.modified = false;
                 this.updateTitle(windowId);
-                notify.success('成功', `文件 "${this.currentFile}" 已打开`);
+                notify.success('成功', `文件 "${instance.currentFile}" 已打开`);
             } else {
                 notify.error('错误', result.error);
             }
@@ -100,50 +109,69 @@ class TextEditorApp {
 
         // 保存
         btnSave.addEventListener('click', () => {
-            this.saveFile(textarea.value, windowId);
+            this.saveFile(windowId, textarea.value);
         });
 
         // 另存为
         btnSaveAs.addEventListener('click', () => {
-            this.saveFileAs(textarea.value, windowId);
+            this.saveFileAs(windowId, textarea.value);
         });
 
         // Ctrl+S 保存
         textarea.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                 e.preventDefault();
-                this.saveFile(textarea.value, windowId);
+                this.saveFile(windowId, textarea.value);
             }
         });
+
+        // 窗口关闭时清理实例
+        const window = windowManager.windows.get(windowId);
+        if (window && window.element) {
+            const closeBtn = window.element.querySelector('.window-control-btn.close');
+            if (closeBtn) {
+                const originalClose = closeBtn.onclick;
+                closeBtn.onclick = () => {
+                    this.instances.delete(windowId);
+                    if (originalClose) originalClose();
+                };
+            }
+        }
     }
 
-    saveFile(content, windowId) {
-        if (!this.currentFilePath) {
-            return this.saveFileAs(content, windowId);
+    saveFile(windowId, content) {
+        const instance = this.instances.get(windowId);
+        if (!instance) return;
+
+        if (!instance.currentFilePath) {
+            return this.saveFileAs(windowId, content);
         }
 
-        const result = storage.writeFile(this.currentFilePath, content);
+        const result = storage.writeFile(instance.currentFilePath, content);
         if (result.success) {
-            this.modified = false;
+            instance.modified = false;
             this.updateTitle(windowId);
-            notify.success('保存成功', `文件 "${this.currentFile}" 已保存`);
+            notify.success('保存成功', `文件 "${instance.currentFile}" 已保存到 ${instance.currentFilePath}`);
         } else {
             notify.error('保存失败', result.error);
         }
     }
 
-    saveFileAs(content, windowId) {
+    saveFileAs(windowId, content) {
+        const instance = this.instances.get(windowId);
+        if (!instance) return;
+
         const path = prompt('请输入保存路径：', '/home/user/Documents/untitled.txt');
         if (!path) return;
 
         const result = storage.writeFile(path, content);
         if (result.success) {
             const parts = path.split('/');
-            this.currentFile = parts[parts.length - 1];
-            this.currentFilePath = path;
-            this.modified = false;
+            instance.currentFile = parts[parts.length - 1];
+            instance.currentFilePath = path;
+            instance.modified = false;
             this.updateTitle(windowId);
-            notify.success('保存成功', `文件 "${this.currentFile}" 已保存`);
+            notify.success('保存成功', `文件 "${instance.currentFile}" 已保存到 ${path}`);
         } else {
             notify.error('保存失败', result.error);
         }
@@ -151,13 +179,14 @@ class TextEditorApp {
 
     updateTitle(windowId, title = null) {
         const window = windowManager.windows.get(windowId);
-        if (!window) return;
+        const instance = this.instances.get(windowId);
+        if (!window || !instance) return;
 
         if (title) {
             window.title = title;
         } else {
-            const filename = this.currentFile || '未命名';
-            const modified = this.modified ? ' *' : '';
+            const filename = instance.currentFile || '未命名';
+            const modified = instance.modified ? ' *' : '';
             window.title = `文本编辑器 - ${filename}${modified}`;
         }
 

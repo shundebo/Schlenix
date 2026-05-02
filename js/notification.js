@@ -146,4 +146,17 @@ style.textContent = `
 document.head.appendChild(style);
 
 // 全局通知系统实例
-const notify = new NotificationSystem();
+let notify;
+try {
+    notify = new NotificationSystem();
+    console.log('Notification system initialized successfully');
+} catch (e) {
+    console.error('Failed to initialize notification system:', e);
+    notify = {
+        show: () => {},
+        success: () => {},
+        error: () => {},
+        warning: () => {},
+        info: () => {}
+    };
+}

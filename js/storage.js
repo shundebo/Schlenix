@@ -368,4 +368,11 @@ class StorageManager {
 }
 
 // 全局存储管理器实例
-const storage = new StorageManager();
+let storage;
+try {
+    storage = new StorageManager();
+    console.log('Storage initialized successfully');
+} catch (e) {
+    console.error('Failed to initialize storage:', e);
+    storage = null;
+}
