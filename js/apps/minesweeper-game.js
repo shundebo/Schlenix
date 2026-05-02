@@ -61,6 +61,16 @@ class MinesweeperGameApp {
         const content = windowManager.getWindowContent(windowId)
         if (!content) return;
 
+        // 阻止整个游戏区域的右键菜单
+        const board = content.querySelector('.minesweeper-board');
+        if (board) {
+            board.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }, true);
+        }
+
         const btnRestart = content.querySelector('.game-restart');
         const difficultySelect = content.querySelector('.difficulty-select');
 
@@ -86,6 +96,13 @@ class MinesweeperGameApp {
             }
             this.restartGame(windowId);
         });
+
+        // 阻止窗口内容区域的右键菜单
+        content.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }, true);
 
         const window = windowManager.windows.get(windowId);
         if (window && window.element) {
