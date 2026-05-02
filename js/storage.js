@@ -369,4 +369,3 @@ class StorageManager {
 
 // 全局存储管理器实例
 const storage = new StorageManager();
-</contents>

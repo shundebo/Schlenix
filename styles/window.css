@@ -87,6 +87,8 @@
     flex: 1;
     overflow: auto;
     background: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
 }
 
 /* 窗口调整大小手柄 */
