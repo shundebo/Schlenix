@@ -65,9 +65,10 @@ class SnakeGameApp {
         btnRestart.addEventListener('click', () => this.restartGame(windowId));
 
         // 键盘控制
-        document.addEventListener('keydown', (e) => {
+        const keyHandler = (e) => {
             const instance = this.instances.get(windowId);
-            if (!instance || instance.gameOver) return;
+            const window = windowManager.windows.get(windowId);
+            if (!instance || instance.gameOver || !window || windowManager.activeWindow !== windowId) return;
 
             const key = e.key;
             if (key === 'ArrowUp' && instance.direction !== 'down') {
@@ -83,7 +84,14 @@ class SnakeGameApp {
                 instance.nextDirection = 'right';
                 e.preventDefault();
             }
-        });
+        };
+        document.addEventListener('keydown', keyHandler);
+
+        // 保存处理器以便清理
+        const instance = this.instances.get(windowId);
+        if (instance) {
+            instance.keyHandler = keyHandler;
+        }
 
         // 窗口关闭时清理
         const window = windowManager.windows.get(windowId);
@@ -266,6 +274,9 @@ class SnakeGameApp {
         const instance = this.instances.get(windowId);
         if (instance) {
             this.pauseGame(windowId);
+            if (instance.keyHandler) {
+                document.removeEventListener('keydown', instance.keyHandler);
+            }
             this.instances.delete(windowId);
         }
     }

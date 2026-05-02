@@ -238,7 +238,14 @@ class MinesweeperGameApp {
                     cell.addEventListener('click', () => this.revealCell(windowId, i, j));
                     cell.addEventListener('contextmenu', (e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         this.toggleFlag(windowId, i, j);
+                    });
+                    cell.addEventListener('mousedown', (e) => {
+                        if (e.button === 2) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
                     });
                 }
 

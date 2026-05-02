@@ -60,9 +60,10 @@ class Game2048App {
         btnRestart.addEventListener('click', () => this.restartGame(windowId));
 
         // 键盘控制
-        document.addEventListener('keydown', (e) => {
+        const keyHandler = (e) => {
             const instance = this.instances.get(windowId);
-            if (!instance || instance.gameOver) return;
+            const window = windowManager.windows.get(windowId);
+            if (!instance || instance.gameOver || !window || windowManager.activeWindow !== windowId) return;
 
             let moved = false;
             if (e.key === 'ArrowUp') {
@@ -84,7 +85,14 @@ class Game2048App {
                 this.updateDisplay(windowId);
                 this.checkGameOver(windowId);
             }
-        });
+        };
+        document.addEventListener('keydown', keyHandler);
+
+        // 保存处理器以便清理
+        const instance = this.instances.get(windowId);
+        if (instance) {
+            instance.keyHandler = keyHandler;
+        }
 
         const window = windowManager.windows.get(windowId);
         if (window && window.element) {
@@ -92,6 +100,10 @@ class Game2048App {
             if (closeBtn) {
                 const originalClose = closeBtn.onclick;
                 closeBtn.onclick = () => {
+                    const instance = this.instances.get(windowId);
+                    if (instance && instance.keyHandler) {
+                        document.removeEventListener('keydown', instance.keyHandler);
+                    }
                     this.instances.delete(windowId);
                     if (originalClose) originalClose();
                 };

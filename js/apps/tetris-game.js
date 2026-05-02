@@ -81,9 +81,10 @@ class TetrisGameApp {
         btnRestart.addEventListener('click', () => this.restartGame(windowId));
 
         // 键盘控制
-        document.addEventListener('keydown', (e) => {
+        const keyHandler = (e) => {
             const instance = this.instances.get(windowId);
-            if (!instance || instance.gameOver || !instance.gameLoop) return;
+            const window = windowManager.windows.get(windowId);
+            if (!instance || instance.gameOver || !instance.gameLoop || !window || windowManager.activeWindow !== windowId) return;
 
             if (e.key === 'ArrowLeft') {
                 this.movePiece(windowId, -1, 0);
@@ -101,7 +102,14 @@ class TetrisGameApp {
                 this.dropPiece(windowId);
                 e.preventDefault();
             }
-        });
+        };
+        document.addEventListener('keydown', keyHandler);
+
+        // 保存处理器以便清理
+        const instance = this.instances.get(windowId);
+        if (instance) {
+            instance.keyHandler = keyHandler;
+        }
 
         const window = windowManager.windows.get(windowId);
         if (window && window.element) {
@@ -372,6 +380,9 @@ class TetrisGameApp {
         const instance = this.instances.get(windowId);
         if (instance) {
             this.pauseGame(windowId);
+            if (instance.keyHandler) {
+                document.removeEventListener('keydown', instance.keyHandler);
+            }
             this.instances.delete(windowId);
         }
     }
