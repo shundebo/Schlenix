@@ -20,12 +20,30 @@ class Desktop {
         const positions = storage.get('desktop_icon_positions') || {};
         const icons = document.querySelectorAll('.desktop-icon');
         
-        icons.forEach(icon => {
+        // 默认网格布局参数
+        const iconWidth = 80;
+        const iconHeight = 90;
+        const gap = 20;
+        const startX = 20;
+        const startY = 20;
+        const columns = Math.floor((window.innerWidth - startX) / (iconWidth + gap));
+        
+        icons.forEach((icon, index) => {
             const appName = icon.dataset.app;
+            icon.style.position = 'absolute';
+            
             if (positions[appName]) {
-                icon.style.position = 'absolute';
+                // 使用保存的位置
                 icon.style.left = positions[appName].x + 'px';
                 icon.style.top = positions[appName].y + 'px';
+            } else {
+                // 使用默认网格位置
+                const col = index % columns;
+                const row = Math.floor(index / columns);
+                const x = startX + col * (iconWidth + gap);
+                const y = startY + row * (iconHeight + gap);
+                icon.style.left = x + 'px';
+                icon.style.top = y + 'px';
             }
         });
     }
