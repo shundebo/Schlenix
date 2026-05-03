@@ -94,8 +94,22 @@ class Desktop {
         document.addEventListener('mouseup', () => {
             if (this.isDragging && this.draggedIcon) {
                 const appName = this.draggedIcon.dataset.app;
-                const x = parseInt(this.draggedIcon.style.left);
-                const y = parseInt(this.draggedIcon.style.top);
+                let x = parseInt(this.draggedIcon.style.left);
+                let y = parseInt(this.draggedIcon.style.top);
+                
+                // 网格吸附
+                const gridSize = 100; // 网格大小 (80px 图标 + 20px 间距)
+                const startX = 20;
+                const startY = 20;
+                
+                // 计算最近的网格位置
+                x = Math.round((x - startX) / gridSize) * gridSize + startX;
+                y = Math.round((y - startY) / gridSize) * gridSize + startY;
+                
+                // 应用吸附后的位置
+                this.draggedIcon.style.left = x + 'px';
+                this.draggedIcon.style.top = y + 'px';
+                
                 this.saveIconPosition(appName, x, y);
                 
                 this.isDragging = false;
@@ -281,5 +295,7 @@ class Desktop {
     }
 }
 
-// 初始化桌面
-const desktop = new Desktop();
+// 初始化桌面 - 等待 DOM 加载完成
+document.addEventListener('DOMContentLoaded', () => {
+    const desktop = new Desktop();
+});
